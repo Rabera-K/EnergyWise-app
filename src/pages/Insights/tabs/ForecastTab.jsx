@@ -1,14 +1,31 @@
 import styles from "./ForecastTab.module.css";
+import { useState, useEffect } from "react";
 
 export default function ForecastTab() {
+  const [dashData, setDashData] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem("ew_token");
+    const headers = { Authorization: `Bearer ${token}` };
+
+    //dashboard analytics
+    fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
+      .then((r) => r.json())
+      .then((d) => {
+        console.log("dashboard response:", d);
+        if (d.success) setDashData(d.data);
+      })
+      .catch(() => {});
+  }, []);
   return (
     <div className={styles.wrap}>
       <section className={styles.balanceCard}>
         <div className={styles.balanceLabel}>CURRENT BALANCE</div>
         <div className={styles.balanceValue}>
-          45.2 <span>kWh</span>
+          {dashData?.available_energy ?? 45.2} <span>kWh</span>
         </div>
-        <div className={styles.balanceSub}>Lasts approximately 6 days</div>
+        <div className={styles.balanceSub}>
+          Lasts approximately {dashData?.estimated_duration_days ?? 6} days
+        </div>
       </section>
 
       <section className={styles.card}>
@@ -36,8 +53,9 @@ export default function ForecastTab() {
         <div>
           <div className={styles.infoTitle}>How We Calculate This</div>
           <div className={styles.infoText}>
-            Forecasts are based on your appliance data, historical usage patterns, and current
-            consumption rate. Accuracy improves with more data
+            Forecasts are based on your appliance data, historical usage
+            patterns, and current consumption rate. Accuracy improves with more
+            data
           </div>
         </div>
       </section>
