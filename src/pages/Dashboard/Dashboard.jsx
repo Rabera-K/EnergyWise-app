@@ -4,6 +4,7 @@ import { useGreeting } from "../../Hooks/useGreeting";
 import styles from "./Dashboard.module.css";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
+import { useState, useEffect } from "react";
 
 const monthlyConsumption = [
   { m: "Jan", v: 38 },
@@ -20,50 +21,50 @@ const monthlyConsumption = [
   { m: "Dec", v: 28 },
 ];
 
-const topConsumers = [
-  {
-    name: "Air Conditioner",
-    meta: "1500W. 8hrs/day",
-    kwh: "12 kWh",
-    pct: "60%",
-    type: "ac",
-  },
-  {
-    name: "Refrigerator",
-    meta: "150W. 24hrs/day",
-    kwh: "3.6 kWh",
-    pct: "18%",
-    type: "fridge",
-  },
-  {
-    name: "Refrigerator",
-    meta: "150W. 24hrs/day",
-    kwh: "3.6 kWh",
-    pct: "18%",
-    type: "fridge",
-  },
-  {
-    name: "Refrigerator",
-    meta: "150W. 24hrs/day",
-    kwh: "3.6 kWh",
-    pct: "18%",
-    type: "fridge",
-  },
-  {
-    name: "Refrigerator",
-    meta: "150W. 24hrs/day",
-    kwh: "3.6 kWh",
-    pct: "18%",
-    type: "fridge",
-  },
-  {
-    name: "Refrigerator",
-    meta: "150W. 24hrs/day",
-    kwh: "3.6 kWh",
-    pct: "18%",
-    type: "fridge",
-  },
-];
+// const topConsumers = [
+//   {
+//     name: "Air Conditioner",
+//     meta: "1500W. 8hrs/day",
+//     kwh: "12 kWh",
+//     pct: "60%",
+//     type: "ac",
+//   },
+//   {
+//     name: "Refrigerator",
+//     meta: "150W. 24hrs/day",
+//     kwh: "3.6 kWh",
+//     pct: "18%",
+//     type: "fridge",
+//   },
+//   {
+//     name: "Refrigerator",
+//     meta: "150W. 24hrs/day",
+//     kwh: "3.6 kWh",
+//     pct: "18%",
+//     type: "fridge",
+//   },
+//   {
+//     name: "Refrigerator",
+//     meta: "150W. 24hrs/day",
+//     kwh: "3.6 kWh",
+//     pct: "18%",
+//     type: "fridge",
+//   },
+//   {
+//     name: "Refrigerator",
+//     meta: "150W. 24hrs/day",
+//     kwh: "3.6 kWh",
+//     pct: "18%",
+//     type: "fridge",
+//   },
+//   {
+//     name: "Refrigerator",
+//     meta: "150W. 24hrs/day",
+//     kwh: "3.6 kWh",
+//     pct: "18%",
+//     type: "fridge",
+//   },
+// ];
 
 function AcIcon() {
   return (
@@ -259,7 +260,38 @@ export default function Dashboard() {
   const greeting = useGreeting();
   const { user } = useUser();
   const navigate = useNavigate();
+  const [dashData, setDashData] = useState(null);
+  const [recommendation, setRec] = useState(null);
+  const [appliances, setAppliances] = useState([]);
 
+  useEffect(() => {
+    const token = localStorage.getItem("ew_token");
+    const headers = { Authorization: `Bearer ${token}` };
+
+    //dashboard analytics
+    fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setDashData(d.data);
+      })
+      .catch(() => {});
+
+    // Recommendations
+    fetch(`${import.meta.env.VITE_API_URL}/recommendations`, { headers })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setRec(d.data);
+      })
+      .catch(() => {});
+
+    // Appliances for top consumers
+    fetch(`${import.meta.env.VITE_API_URL}/appliances`, { headers })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setAppliances(d.data);
+      })
+      .catch(() => {});
+  }, []);
   return (
     <div className={styles.page}>
       <PageHeader
@@ -273,21 +305,27 @@ export default function Dashboard() {
         <section className={styles.balanceCard}>
           <div className={styles.balanceLabel}>AVAILABLE ENERGY</div>
           <div className={styles.balanceValue}>
-            45.2 <span>kWh</span>
+            {dashData?.available_units ?? 45.2} <span>kWh</span>
           </div>
 
           <div className={styles.balanceStats}>
             <div className={styles.stat}>
               <div className={styles.statLabel}>Estimated Duration</div>
-              <div className={styles.statValue}>6 days</div>
+              <div className={styles.statValue}>
+                {dashData?.days_remaining ?? 6} days
+              </div>
             </div>
             <div className={styles.stat}>
               <div className={styles.statLabel}>Daily Average</div>
-              <div className={styles.statValue}>7.5 kWh</div>
+              <div className={styles.statValue}>
+                {dashData?.daily_average ?? 7.5} kWh
+              </div>
             </div>
             <div className={styles.stat}>
               <div className={styles.statLabel}>Last Purchase</div>
-              <div className={styles.statValue}>Feb 8</div>
+              <div className={styles.statValue}>
+                {dashData?.last_purchase ?? "Feb 8"}
+              </div>
             </div>
           </div>
 
@@ -316,7 +354,9 @@ export default function Dashboard() {
           </div>
           <div className={styles.todayRight}>
             <div className={styles.todayDelta}>-12%</div>
-            <div className={styles.todayValue}>3.8 kWh</div>
+            <div className={styles.todayValue}>
+              {dashData?.today_consumption ?? 3.8} kWh
+            </div>
             <div className={styles.todayLabel}>Today's Consumption</div>
           </div>
         </section>
@@ -360,8 +400,8 @@ export default function Dashboard() {
               <span>Recommendation</span>
             </div>
             <p className={styles.recoText}>
-              Your AC accounts for 60% of energy consumption. Reducing usage by
-              2 hours/day could save ₦2,400/month.
+              {recommendation?.recommendations?.[0]?.message ??
+                "Your AC accounts for 60% of energy consumption. Reducing usage by 2 hours/day could save ₦2,400/month."}
             </p>
             <button className={styles.recoBtn}>View Full Insight →</button>
           </section>
@@ -371,20 +411,29 @@ export default function Dashboard() {
               <h3>Top Consumers</h3>
             </div>
             <div className={styles.list}>
-              {topConsumers.map((x, idx) => (
-                <div className={styles.listRow} key={`${x.name}-${idx}`}>
+              {appliances.slice(0, 6).map((x, idx) => (
+                <div className={styles.listRow} key={idx}>
                   <div className={styles.listLeft}>
                     <div className={styles.deviceIcon}>
-                      <DeviceIcon type={x.type} />
+                      <FridgeIcon />
                     </div>
                     <div>
-                      <div className={styles.deviceName}>{x.name}</div>
-                      <div className={styles.deviceMeta}>{x.meta}</div>
+                      <div className={styles.deviceName}>
+                        {x.appliance_type}
+                      </div>
+                      <div className={styles.deviceMeta}>
+                        {x.wattage}W · {x.hours_per_day}hrs/day
+                      </div>
                     </div>
                   </div>
                   <div className={styles.listRight}>
-                    <div className={styles.kwh}>{x.kwh}</div>
-                    <div className={styles.pct}>{x.pct}</div>
+                    <div className={styles.kwh}>
+                      {(
+                        (x.wattage * x.hours_per_day * x.duty_cycle) /
+                        1000
+                      ).toFixed(1)}{" "}
+                      kWh
+                    </div>
                   </div>
                 </div>
               ))}
