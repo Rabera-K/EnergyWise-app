@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./EnergyUnits.module.css";
 
@@ -11,13 +11,27 @@ const QUICK_PURCHASE = [
 function EnergyUnits() {
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
+  const [dashData, setDashData] = useState(null);
+  useEffect(() => {
+    const token = localStorage.getItem("ew_token");
+    const headers = { Authorization: `Bearer ${token}` };
+
+    //dashboard analytics
+    fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
+      .then((r) => r.json())
+      .then((d) => {
+        console.log("dashboard response:", d);
+        if (d.success) setDashData(d.data);
+      })
+      .catch(() => {});
+  }, []);
   return (
     <div className={styles.container}>
       <div className={styles.balanceCard}>
         <div className={styles.frame}>
           <p className={styles.balanceLabel}>AVAILABLE ENERGY</p>
           <p className={styles.balanceValue}>
-            45.2 <span>kWh</span>
+            {dashData?.available_energy ?? 45.2} <span>kWh</span>
           </p>
         </div>
 

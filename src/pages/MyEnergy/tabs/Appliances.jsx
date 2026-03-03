@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Appliances.module.css";
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
+import iconMap from "../../../utils/iconMap";
 
 // const DONUT_DATA = [
 //   { name: "Air Conditioner", value: 60, fill: "#10b981" },
@@ -153,6 +154,19 @@ function DeleteIcon() {
 //     cost: "₦396",
 //   },
 // ];
+const APPLIANCE_TYPE_TO_KEY = {
+  "Air Conditioner": "ac",
+  Fridge: "fridge",
+  Bulb: "bulb",
+  Laptop: "laptop",
+  Fan: "fan",
+  Kettle: "kettle",
+  Modem: "modem",
+  "Hand Dryer": "dryer",
+  TV: "tv",
+  Microwave: "microwave",
+  "Other Appliances": "socket",
+};
 const CHART_COLORS = [
   "#09907f", // teal
   "#f59e0b", // amber
@@ -181,6 +195,7 @@ function Appliances() {
   const [appliances, setAppliances] = useState([]);
   const [dashData, setDashData] = useState(null);
   const navigate = useNavigate();
+
   const totalKwh = appliances.reduce(
     (sum, a) => sum + (a.wattage * a.hours_per_day * a.duty_cycle) / 1000,
     0,
@@ -427,44 +442,54 @@ function Appliances() {
           </div>
 
           {/* Data Rows */}
-          {appliances.map((item, idx) => (
-            <div key={item.id ?? idx} className={styles.row}>
-              <div className={styles.applianceCell}>
-                <div className={styles.applianceIcon}>
-                  <ApplianceIcon />
+          {appliances.map((item, idx) => {
+            const iconKey = APPLIANCE_TYPE_TO_KEY[item.appliance_type];
+            const Icon = iconMap[iconKey];
+            return (
+              <div key={item.id ?? idx} className={styles.row}>
+                <div className={styles.applianceCell}>
+                  <div className={styles.applianceIcon}>
+                    {Icon ? (
+                      <Icon className={styles.cardIcon} />
+                    ) : (
+                      <ApplianceIcon />
+                    )}
+                  </div>
+                  <div className={styles.textBlock}>
+                    <p className={styles.applianceName}>
+                      {item.appliance_type}
+                    </p>
+                    <p className={styles.applianceLocation}>—</p>
+                  </div>
                 </div>
-                <div className={styles.textBlock}>
-                  <p className={styles.applianceName}>{item.appliance_type}</p>
-                  <p className={styles.applianceLocation}>—</p>
+                <div className={styles.specs}>
+                  {item.wattage}W · {item.hours_per_day} hrs/day
+                </div>
+                <div className={styles.usage}>
+                  {(
+                    (item.wattage * item.hours_per_day * item.duty_cycle) /
+                    1000
+                  ).toFixed(1)}{" "}
+                  kWh
+                </div>
+                <div>
+                  <span className={styles.contributionBadge}>—</span>
+                </div>
+                <div className={styles.dailyCost}>—</div>
+                <div className={styles.actionBtns}>
+                  <button className={styles.editBtn}>
+                    <EditIcon />
+                  </button>
+                  <button
+                    className={styles.deleteBtn}
+                    onClick={() => handleDelete(item.id)}
+                  >
+                    <DeleteIcon />
+                  </button>
                 </div>
               </div>
-              <div className={styles.specs}>
-                {item.wattage}W · {item.hours_per_day} hrs/day
-              </div>
-              <div className={styles.usage}>
-                {(
-                  (item.wattage * item.hours_per_day * item.duty_cycle) /
-                  1000
-                ).toFixed(1)}{" "}
-                kWh
-              </div>
-              <div>
-                <span className={styles.contributionBadge}>—</span>
-              </div>
-              <div className={styles.dailyCost}>—</div>
-              <div className={styles.actionBtns}>
-                <button className={styles.editBtn}>
-                  <EditIcon />
-                </button>
-                <button
-                  className={styles.deleteBtn}
-                  onClick={() => handleDelete(item.id)}
-                >
-                  <DeleteIcon />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

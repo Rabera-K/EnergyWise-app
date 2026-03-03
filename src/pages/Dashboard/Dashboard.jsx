@@ -5,6 +5,7 @@ import styles from "./Dashboard.module.css";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import { useState, useEffect } from "react";
+import iconMap from "../../utils/iconMap";
 
 const monthlyConsumption = [
   { m: "Jan", v: 38 },
@@ -20,51 +21,19 @@ const monthlyConsumption = [
   { m: "Nov", v: 34 },
   { m: "Dec", v: 28 },
 ];
-
-// const topConsumers = [
-//   {
-//     name: "Air Conditioner",
-//     meta: "1500W. 8hrs/day",
-//     kwh: "12 kWh",
-//     pct: "60%",
-//     type: "ac",
-//   },
-//   {
-//     name: "Refrigerator",
-//     meta: "150W. 24hrs/day",
-//     kwh: "3.6 kWh",
-//     pct: "18%",
-//     type: "fridge",
-//   },
-//   {
-//     name: "Refrigerator",
-//     meta: "150W. 24hrs/day",
-//     kwh: "3.6 kWh",
-//     pct: "18%",
-//     type: "fridge",
-//   },
-//   {
-//     name: "Refrigerator",
-//     meta: "150W. 24hrs/day",
-//     kwh: "3.6 kWh",
-//     pct: "18%",
-//     type: "fridge",
-//   },
-//   {
-//     name: "Refrigerator",
-//     meta: "150W. 24hrs/day",
-//     kwh: "3.6 kWh",
-//     pct: "18%",
-//     type: "fridge",
-//   },
-//   {
-//     name: "Refrigerator",
-//     meta: "150W. 24hrs/day",
-//     kwh: "3.6 kWh",
-//     pct: "18%",
-//     type: "fridge",
-//   },
-// ];
+const APPLIANCE_TYPE_TO_KEY = {
+  "Air Conditioner": "ac",
+  Fridge: "fridge",
+  Bulb: "bulb",
+  Laptop: "laptop",
+  Fan: "fan",
+  Kettle: "kettle",
+  Modem: "modem",
+  "Hand Dryer": "dryer",
+  TV: "tv",
+  Microwave: "microwave",
+  "Other Appliances": "socket",
+};
 
 function AcIcon() {
   return (
@@ -419,32 +388,40 @@ export default function Dashboard() {
               <h3>Top Consumers</h3>
             </div>
             <div className={styles.list}>
-              {appliances.slice(0, 6).map((x, idx) => (
-                <div className={styles.listRow} key={idx}>
-                  <div className={styles.listLeft}>
-                    <div className={styles.deviceIcon}>
-                      <FridgeIcon />
-                    </div>
-                    <div>
-                      <div className={styles.deviceName}>
-                        {x.appliance_type}
+              {appliances.slice(0, 6).map((x, idx) => {
+                const iconKey = APPLIANCE_TYPE_TO_KEY[x.appliance_type];
+                const Icon = iconMap[iconKey];
+                return (
+                  <div className={styles.listRow} key={idx}>
+                    <div className={styles.listLeft}>
+                      <div>
+                        {Icon ? (
+                          <Icon className={styles.cardIcon} />
+                        ) : (
+                          <ApplianceIcon />
+                        )}
                       </div>
-                      <div className={styles.deviceMeta}>
-                        {x.wattage}W · {x.hours_per_day}hrs/day
+                      <div>
+                        <div className={styles.deviceName}>
+                          {x.appliance_type}
+                        </div>
+                        <div className={styles.deviceMeta}>
+                          {x.wattage}W · {x.hours_per_day}hrs/day
+                        </div>
+                      </div>
+                    </div>
+                    <div className={styles.listRight}>
+                      <div className={styles.kwh}>
+                        {(
+                          (x.wattage * x.hours_per_day * x.duty_cycle) /
+                          1000
+                        ).toFixed(1)}{" "}
+                        kWh
                       </div>
                     </div>
                   </div>
-                  <div className={styles.listRight}>
-                    <div className={styles.kwh}>
-                      {(
-                        (x.wattage * x.hours_per_day * x.duty_cycle) /
-                        1000
-                      ).toFixed(1)}{" "}
-                      kWh
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </section>
         </div>
