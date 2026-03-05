@@ -17,14 +17,12 @@ import QuickSetup from "./components/auth/QuickSetup/QuickSetup";
 import ProtectedRoute from "./components/auth/ProtectedRoute/ProtectedRoute";
 import UserTypeSelect from "./components/auth/UserTypeSelect/UserType";
 import MeterSetup from "./components/auth/MeterSetup/MeterSetup";
+import Account from "./pages/Account/Account";
 
 // Stub pages to be replaced with real components
 
 function Services() {
   return <h1>Services: Coming Soon</h1>;
-}
-function Account() {
-  return <h1>Account: Coming Soon</h1>;
 }
 
 function App() {

@@ -242,7 +242,6 @@ export default function Dashboard() {
     fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
       .then((r) => r.json())
       .then((d) => {
-        console.log("dashboard response:", d);
         if (d.success) setDashData(d.data);
         // Map monthly_trend to chart format
         const trend = (d.data.monthly_trend || []).map((t) => ({
@@ -259,7 +258,6 @@ export default function Dashboard() {
     fetch(`${import.meta.env.VITE_API_URL}/recommendations`, { headers })
       .then((r) => r.json())
       .then((d) => {
-        console.log("recommendations response:", d);
         if (d.success) setRec(d.data);
       })
       .catch(() => {});
@@ -268,7 +266,6 @@ export default function Dashboard() {
     fetch(`${import.meta.env.VITE_API_URL}/appliances`, { headers })
       .then((r) => r.json())
       .then((d) => {
-        console.log("appliances response:", d);
         if (d.success) setAppliances(d.data);
       })
       .catch(() => {});

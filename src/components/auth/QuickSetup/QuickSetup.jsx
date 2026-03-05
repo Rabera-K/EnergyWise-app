@@ -140,13 +140,12 @@ const QuickSetup = () => {
             },
           );
           const data = await res.json();
-          console.log("appliance save response:", data);
+
           if (!res.ok)
             throw new Error(data.message || "Failed to save appliance");
         }),
       );
 
-      console.log("Appliances saved:", selectedAppliances);
       navigate("/dashboard");
     } catch (error) {
       console.error("Error:", error);

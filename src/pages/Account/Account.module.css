@@ -1,0 +1,369 @@
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Loading */
+.loadingWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #0d7a6d;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Profile Card  */
+.profileCard {
+  background: white;
+  border-radius: 16px;
+  padding: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.avatarWrap {
+  flex-shrink: 0;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #e0f2ef;
+}
+
+.profileInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.profileName {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1a1f1e;
+  margin: 0 0 0.2rem;
+}
+
+.profileEmail {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 0.75rem;
+}
+
+.profileActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.accountBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #e0f2ef;
+  color: #0d7a6d;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+}
+
+.editBtn {
+  background: white;
+  border: 1.5px solid #0d7a6d;
+  color: #0d7a6d;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.35rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.editBtn:hover {
+  background: #0d7a6d;
+  color: white;
+}
+
+/* Sections  */
+.section {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.sectionLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  padding: 1rem 1.25rem 0.5rem;
+  margin: 0;
+}
+
+/*  List Items */
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 1.25rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.listItem:first-of-type {
+  border-top: none;
+}
+
+.listItemClickable {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.listItemClickable:hover {
+  background: #f9fafb;
+}
+
+.listLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.listIcon {
+  width: 32px;
+  height: 32px;
+  background: #f0fdfa;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.listTitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1a1f1e;
+  margin: 0;
+}
+
+.listSub {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0.15rem 0 0;
+}
+
+/* Toggle */
+.toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  background: #e5e7eb;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.toggleOn {
+  background: #0d7a6d;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(20px);
+}
+
+/* ── Edit Modal  */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.modalHeader h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a1f1e;
+  margin: 0;
+}
+
+.modalClose {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+.modalClose:hover {
+  background: #f3f4f6;
+}
+
+.modalBody {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.field input,
+.field select {
+  padding: 0.75rem 0.9rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #1a1f1e;
+  background: white;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: #0d7a6d;
+  box-shadow: 0 0 0 3px rgba(13, 122, 109, 0.08);
+}
+
+.field select:disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+}
+
+.errorText {
+  color: #ef4444;
+  font-size: 0.82rem;
+  margin: 0;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.cancelBtn {
+  background: white;
+  border: 1.5px solid #e5e7eb;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.saveBtn {
+  background: #0d7a6d;
+  border: none;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: #0a6459;
+}
+.saveBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/*  Responsive  */
+@media (max-width: 480px) {
+  .profileCard {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .profileActions {
+    justify-content: center;
+  }
+
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
+}
