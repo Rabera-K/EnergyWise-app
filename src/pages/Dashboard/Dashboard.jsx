@@ -386,7 +386,12 @@ export default function Dashboard() {
               {recommendation?.recommendations?.[0]?.message ??
                 "Your AC accounts for 60% of energy consumption. Reducing usage by 2 hours/day could save ₦2,400/month."}
             </p>
-            <button className={styles.recoBtn}>View Full Insight →</button>
+            <button
+              className={styles.recoBtn}
+              onClick={() => navigate("/insights")}
+            >
+              View Full Insight →
+            </button>
           </section>
 
           <section className={styles.panel}>
