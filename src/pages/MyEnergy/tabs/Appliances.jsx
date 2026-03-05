@@ -140,9 +140,6 @@ function Appliances() {
             ) || 0,
           fill: CHART_COLORS[index % CHART_COLORS.length],
         }));
-  useEffect(() => {
-    console.log("appliances updated:", appliances.length);
-  }, [appliances]);
 
   useEffect(() => {
     const token = localStorage.getItem("ew_token");
@@ -212,13 +209,21 @@ function Appliances() {
     if (!window.confirm(`Delete ${name}? This cannot be undone.`)) return;
     const token = localStorage.getItem("ew_token");
     try {
-      await fetch(`${import.meta.env.VITE_API_URL}/appliances/${id}`, {
-        method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setAppliances((prev) => prev.filter((a) => a.id !== id));
-    } catch {
-      console.error("Failed to delete appliance");
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/appliances/${id}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      console.log("delete status:", res.status);
+      if (res.ok) {
+        setAppliances((prev) => prev.filter((a) => a.id !== id));
+      } else {
+        alert("Failed to delete appliance");
+      }
+    } catch (err) {
+      console.error("Delete error:", err.message);
     }
   };
   return (
@@ -279,7 +284,16 @@ function Appliances() {
             </div>
             <div className={styles.statItem}>
               <p className={styles.statLabel}>Next Suggested</p>
-              <p className={styles.statValue}>Feb 18</p>
+              <p className={styles.statValue}>
+                {dashData?.forecast_depletion_date
+                  ? new Date(
+                      dashData.forecast_depletion_date,
+                    ).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : "N/A"}
+              </p>
             </div>
           </div>
           <div className={styles.actions}>

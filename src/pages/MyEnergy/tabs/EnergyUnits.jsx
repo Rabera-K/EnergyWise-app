@@ -20,7 +20,6 @@ function EnergyUnits() {
     fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
       .then((r) => r.json())
       .then((d) => {
-        console.log("dashboard response:", d);
         if (d.success) setDashData(d.data);
       })
       .catch(() => {});
