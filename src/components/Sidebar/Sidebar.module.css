@@ -90,7 +90,7 @@
   top: 16px;
   left: 16px;
   z-index: 200;
-  background: #ffffff;
+  background: #ffffff81;
   border: 1px solid #e2ebe8;
   border-radius: 10px;
   width: 40px;
@@ -132,7 +132,7 @@
   z-index: 99;
 }
 
-/* ── Responsive ──────────────────────────────────── */
+/*RESPONSIVE*/
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);

@@ -35,6 +35,11 @@
   font-weight: 400;
   margin-right: 34px;
 }
+@media (max-width: 480px) {
+  .banner {
+    margin: 20px;
+  }
+}
 
 /* -- Form grid -- */
 .grid {
@@ -197,6 +202,11 @@
   height: 40px;
   font-size: 16px;
   font-weight: 500;
+}
+@media (max-width: 480px) {
+  .actions {
+    margin: 20px;
+  }
 }
 
 .cancelBtn {

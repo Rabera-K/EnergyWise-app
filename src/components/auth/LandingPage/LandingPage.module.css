@@ -1012,6 +1012,8 @@
 @media (max-width: 768px) {
   .navLinks {
     gap: 1rem;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .navLink {

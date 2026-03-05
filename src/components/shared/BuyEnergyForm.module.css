@@ -47,6 +47,12 @@
   font-size: 14px;
   font-weight: 400;
 }
+@media (max-width: 500px) {
+  .balanceCard {
+    margin: 20px;
+    padding: 10px;
+  }
+}
 
 /*  Section title  */
 .sectionTitle {
@@ -110,6 +116,7 @@
 @media (max-width: 500px) {
   .presets {
     grid-template-columns: repeat(2, 1fr);
+    margin-right: 15px;
   }
 }
 
@@ -230,6 +237,7 @@
 @media (max-width: 480px) {
   .paymentMethods {
     grid-template-columns: 1fr;
+    margin: 20px;
   }
 }
 
@@ -244,6 +252,11 @@
   gap: 10px;
   margin-left: 41px;
   margin-bottom: 56px;
+}
+@media (max-width: 480px) {
+  .orderSummary {
+    margin: 20px;
+  }
 }
 
 .orderTitle {
@@ -344,6 +357,11 @@
 .continueBtn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+@media (max-width: 480px) {
+  .actions {
+    margin: 20px;
+  }
 }
 /* -- Success modal -- */
 .modalOverlay {

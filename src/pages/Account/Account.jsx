@@ -429,8 +429,8 @@ export default function Account() {
               >
                 <rect width="24" height="24" rx="8" fill="#F5FEFD" />
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M17.0002 2L15.2584 8.99998H20.2584L8.02374 22L10.7607 11H6.76074L9.0001 2H17.0002Z"
                   fill="#C47E08"
                 />
