@@ -82,3 +82,18 @@
   padding: 16px;
   background-color: #f0fdf4;
 }
+@media (max-width: 600px) {
+  .title {
+    font-size: 20px;
+  }
+  .tabs {
+    max-width: 100%;
+  }
+  .tab {
+    font-size: 12px;
+    padding: 0 8px;
+  }
+  .avatar {
+    display: none;
+  }
+}

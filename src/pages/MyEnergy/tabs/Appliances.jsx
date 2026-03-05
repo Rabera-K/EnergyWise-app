@@ -148,7 +148,6 @@ function Appliances() {
     fetch(`${import.meta.env.VITE_API_URL}/appliances`, { headers })
       .then((r) => r.json())
       .then((d) => {
-        console.log("appliances:", d);
         if (d.success) setAppliances(d.data);
       })
       .catch(() => {});
@@ -247,8 +246,9 @@ function Appliances() {
         <button
           className={styles.addBtn}
           onClick={() => navigate("/quicksetup")}
+          aria-label="Add appliance"
         >
-          + Add Appliance
+          + <span className={styles.btnText}>Add Appliance</span>
         </button>
       </div>
       <div className={styles.topGrid}>
