@@ -172,6 +172,45 @@
   color: #6b7280;
   margin: 0.15rem 0 0;
 }
+.inlineInput {
+  margin-top: 0.25rem;
+  padding: 0.35rem 0.6rem;
+  border: 1.5px solid #0d7a6d;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  outline: none;
+  font-family: inherit;
+}
+
+.inlineSave {
+  background: #0d7a6d;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.inlineCancel {
+  background: white;
+  color: #6b7280;
+  border: 1.5px solid #e5e7eb;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+}
 
 /* Toggle */
 .toggle {

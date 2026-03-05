@@ -4,16 +4,45 @@ import { useUser } from "../../context/UserContext";
 import styles from "./Account.module.css";
 
 const AFRICAN_COUNTRIES = {
-  Nigeria: ["Lagos", "Abuja", "Kano", "Ibadan", "Port Harcourt"],
-  Ghana: ["Accra", "Kumasi", "Tamale", "Takoradi"],
-  Kenya: ["Nairobi", "Mombasa", "Kisumu", "Nakuru"],
-  "South Africa": ["Johannesburg", "Cape Town", "Durban", "Pretoria"],
-  Ethiopia: ["Addis Ababa", "Dire Dawa", "Mekelle"],
-  Tanzania: ["Dar es Salaam", "Dodoma", "Mwanza"],
-  Uganda: ["Kampala", "Gulu", "Lira"],
-  Senegal: ["Dakar", "Thiès", "Kaolack"],
-  Rwanda: ["Kigali", "Butare", "Gisenyi"],
-  Cameroon: ["Yaoundé", "Douala", "Bamenda"],
+  Nigeria: [
+    "Lagos",
+    "Abuja",
+    "Kano",
+    "Ibadan",
+    "Port Harcourt",
+    "Benin City",
+    "Kaduna",
+    "Enugu",
+  ],
+  Ghana: ["Accra", "Kumasi", "Tamale", "Sekondi-Takoradi", "Ashaiman"],
+  Kenya: ["Nairobi", "Mombasa", "Kisumu", "Nakuru", "Eldoret"],
+  "South Africa": [
+    "Johannesburg",
+    "Cape Town",
+    "Durban",
+    "Pretoria",
+    "Port Elizabeth",
+  ],
+  Ethiopia: ["Addis Ababa", "Dire Dawa", "Mekelle", "Gondar", "Hawassa"],
+  Tanzania: ["Dar es Salaam", "Dodoma", "Mwanza", "Arusha", "Zanzibar City"],
+  Egypt: ["Cairo", "Alexandria", "Giza", "Shubra El Kheima", "Port Said"],
+  Uganda: ["Kampala", "Gulu", "Lira", "Mbarara", "Jinja"],
+  Senegal: ["Dakar", "Touba", "Thiès", "Rufisque", "Kaolack"],
+  "Ivory Coast": ["Abidjan", "Bouaké", "Daloa", "San-Pédro", "Yamoussoukro"],
+  Cameroon: ["Douala", "Yaoundé", "Bamenda", "Bafoussam", "Garoua"],
+  Rwanda: ["Kigali", "Butare", "Gisenyi", "Ruhengeri", "Byumba"],
+  Zambia: ["Lusaka", "Kitwe", "Ndola", "Kabwe", "Chingola"],
+  Zimbabwe: ["Harare", "Bulawayo", "Chitungwiza", "Mutare", "Gweru"],
+  Mali: ["Bamako", "Sikasso", "Mopti", "Koutiala", "Ségou"],
+  Angola: ["Luanda", "Huambo", "Lobito", "Benguela", "Kuito"],
+  Mozambique: ["Maputo", "Matola", "Beira", "Nampula", "Chimoio"],
+  Madagascar: [
+    "Antananarivo",
+    "Toamasina",
+    "Antsirabe",
+    "Fianarantsoa",
+    "Mahajanga",
+  ],
 };
 
 function AvatarImage({ name, size = 88 }) {
@@ -202,7 +231,7 @@ function EditModal({ profile, onClose, onSave }) {
             >
               <option value="">Select source</option>
               <option value="Grid Connection (NEPA/PHCN)">
-                Grid Connection (NEPA/PHCN)
+                Grid Connection (NEPA/PHCN/KPLC)
               </option>
               <option value="Solar Power">Solar Power</option>
               <option value="Generator">Generator</option>
@@ -246,6 +275,11 @@ export default function Account() {
     recommendations: true,
     alerts: true,
   });
+  const [editingMeter, setEditingMeter] = useState(false);
+  const [editingHousehold, setEditingHousehold] = useState(false);
+  const [meterInput, setMeterInput] = useState("");
+  const [householdInput, setHouseholdInput] = useState("");
+  const [savingMeter, setSavingMeter] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("ew_token");
@@ -361,18 +395,17 @@ export default function Account() {
         <div className={styles.listItem}>
           <div className={styles.listLeft}>
             <span className={styles.listIcon}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <rect width="24" height="24" rx="8" fill="#F5FEFD" />
                 <path
-                  d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-                  stroke="#0d7a6d"
-                  strokeWidth="2"
-                />
-                <circle
-                  cx="12"
-                  cy="10"
-                  r="3"
-                  stroke="#0d7a6d"
-                  strokeWidth="2"
+                  d="M12 11.5C11.337 11.5 10.7011 11.2366 10.2322 10.7678C9.76339 10.2989 9.5 9.66304 9.5 9C9.5 8.33696 9.76339 7.70107 10.2322 7.23223C10.7011 6.76339 11.337 6.5 12 6.5C12.663 6.5 13.2989 6.76339 13.7678 7.23223C14.2366 7.70107 14.5 8.33696 14.5 9C14.5 9.3283 14.4353 9.65339 14.3097 9.95671C14.1841 10.26 13.9999 10.5356 13.7678 10.7678C13.5356 10.9999 13.26 11.1841 12.9567 11.3097C12.6534 11.4353 12.3283 11.5 12 11.5ZM12 2C10.1435 2 8.36301 2.7375 7.05025 4.05025C5.7375 5.36301 5 7.14348 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 7.14348 18.2625 5.36301 16.9497 4.05025C15.637 2.7375 13.8565 2 12 2Z"
+                  fill="#0CC0AA"
                 />
               </svg>
             </span>
@@ -387,81 +420,211 @@ export default function Account() {
         <div className={styles.listItem}>
           <div className={styles.listLeft}>
             <span className={styles.listIcon}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <rect width="24" height="24" rx="8" fill="#F5FEFD" />
                 <path
-                  d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"
-                  stroke="#f59e0b"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M17.0002 2L15.2584 8.99998H20.2584L8.02374 22L10.7607 11H6.76074L9.0001 2H17.0002Z"
+                  fill="#C47E08"
                 />
               </svg>
             </span>
             <div>
               <p className={styles.listTitle}>Meter Number</p>
-              <p className={styles.listSub}>{meterNum}</p>
+              {editingMeter ? (
+                <input
+                  className={styles.inlineInput}
+                  value={meterInput}
+                  onChange={(e) => setMeterInput(e.target.value)}
+                  placeholder="Enter meter number"
+                  autoFocus
+                />
+              ) : (
+                <p className={styles.listSub}>{meterNum}</p>
+              )}
             </div>
           </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-              stroke="#9ca3af"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-              stroke="#9ca3af"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
+          {editingMeter ? (
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <button
+                className={styles.inlineSave}
+                onClick={async () => {
+                  setSavingMeter(true);
+                  try {
+                    const token = localStorage.getItem("ew_token");
+                    await fetch(
+                      `${import.meta.env.VITE_API_URL}/energy-account`,
+                      {
+                        method: "PATCH",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({ meter_number: meterInput }),
+                      },
+                    );
+                    setProfile((prev) => ({
+                      ...prev,
+                      meter_number: meterInput,
+                    }));
+                    setEditingMeter(false);
+                  } catch {
+                    alert("Failed to save meter number");
+                  } finally {
+                    setSavingMeter(false);
+                  }
+                }}
+                disabled={savingMeter}
+              >
+                {savingMeter ? "..." : "Save"}
+              </button>
+              <button
+                className={styles.inlineCancel}
+                onClick={() => setEditingMeter(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              className={styles.iconBtn}
+              onClick={() => {
+                setMeterInput(meterNum === "—" ? "" : meterNum);
+                setEditingMeter(true);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M3.33333 12.6667H4.28333L10.8 6.15L9.85 5.2L3.33333 11.7167V12.6667ZM2 14V11.1667L10.8 2.38333C10.9333 2.26111 11.0807 2.16667 11.242 2.1C11.4033 2.03333 11.5727 2 11.75 2C11.9273 2 12.0996 2.03333 12.2667 2.1C12.4338 2.16667 12.5782 2.26667 12.7 2.4L13.6167 3.33333C13.75 3.45556 13.8473 3.6 13.9087 3.76667C13.97 3.93333 14.0004 4.1 14 4.26667C14 4.44444 13.9696 4.614 13.9087 4.77533C13.8478 4.93667 13.7504 5.08378 13.6167 5.21667L4.83333 14H2ZM10.3167 5.68333L9.85 5.2L10.8 6.15L10.3167 5.68333Z"
+                  fill="#0CC0AA"
+                />
+              </svg>
+            </button>
+          )}
         </div>
 
         <div className={styles.listItem}>
           <div className={styles.listLeft}>
             <span className={styles.listIcon}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <rect width="24" height="24" rx="8" fill="#F5FEFD" />
                 <path
-                  d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
-                  stroke="#0d7a6d"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-                <circle cx="9" cy="7" r="4" stroke="#0d7a6d" strokeWidth="2" />
-                <path
-                  d="M23 21v-2a4 4 0 0 0-3-3.87"
-                  stroke="#0d7a6d"
-                  strokeWidth="2"
-                  strokeLinecap="round"
+                  d="M7.125 12C8.98896 12 10.5 10.489 10.5 8.625C10.5 6.76104 8.98896 5.25 7.125 5.25C5.26104 5.25 3.75 6.76104 3.75 8.625C3.75 10.489 5.26104 12 7.125 12Z"
+                  fill="#C47E08"
                 />
                 <path
-                  d="M16 3.13a4 4 0 0 1 0 7.75"
-                  stroke="#0d7a6d"
-                  strokeWidth="2"
-                  strokeLinecap="round"
+                  d="M10.9688 13.875C9.64875 13.2047 8.19187 12.9375 7.125 12.9375C5.03531 12.9375 0.75 14.2191 0.75 16.7812V18.75H7.78125V17.9967C7.78125 17.1061 8.15625 16.2131 8.8125 15.4688C9.33609 14.8744 10.0692 14.3227 10.9688 13.875Z"
+                  fill="#C47E08"
+                />
+                <path
+                  d="M15.9375 13.5C13.4967 13.5 8.625 15.0075 8.625 18V20.25H23.25V18C23.25 15.0075 18.3783 13.5 15.9375 13.5Z"
+                  fill="black"
+                />
+                <path
+                  d="M15.9375 12C18.2157 12 20.0625 10.1532 20.0625 7.875C20.0625 5.59683 18.2157 3.75 15.9375 3.75C13.6593 3.75 11.8125 5.59683 11.8125 7.875C11.8125 10.1532 13.6593 12 15.9375 12Z"
+                  fill="black"
                 />
               </svg>
             </span>
             <div>
               <p className={styles.listTitle}>Household Size</p>
-              <p className={styles.listSub}>{householdSize}</p>
+              {editingHousehold ? (
+                <select
+                  className={styles.inlineInput}
+                  value={householdInput}
+                  onChange={(e) => setHouseholdInput(e.target.value)}
+                >
+                  <option value="1">1 person</option>
+                  <option value="2">2 people</option>
+                  <option value="3">3 people</option>
+                  <option value="4">4 people</option>
+                  <option value="5">5+ people</option>
+                </select>
+              ) : (
+                <p className={styles.listSub}>{householdSize}</p>
+              )}
             </div>
           </div>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
-              stroke="#9ca3af"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
-              stroke="#9ca3af"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
+          {editingHousehold ? (
+            <div style={{ display: "flex", gap: "0.5rem" }}>
+              <button
+                className={styles.inlineSave}
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem("ew_token");
+                    await fetch(
+                      `${import.meta.env.VITE_API_URL}/users/profile`,
+                      {
+                        method: "PATCH",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: `Bearer ${token}`,
+                        },
+                        body: JSON.stringify({
+                          household_size: Number(householdInput),
+                        }),
+                      },
+                    );
+                    setProfile((prev) => ({
+                      ...prev,
+                      household_size: householdInput,
+                    }));
+                    setEditingHousehold(false);
+                  } catch {
+                    alert("Failed to save household size");
+                  }
+                }}
+              >
+                Save
+              </button>
+              <button
+                className={styles.inlineCancel}
+                onClick={() => setEditingHousehold(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button
+              className={styles.iconBtn}
+              onClick={() => {
+                setHouseholdInput(profile?.household_size || "1");
+                setEditingHousehold(true);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+              >
+                <path
+                  d="M3.33333 12.6667H4.28333L10.8 6.15L9.85 5.2L3.33333 11.7167V12.6667ZM2 14V11.1667L10.8 2.38333C10.9333 2.26111 11.0807 2.16667 11.242 2.1C11.4033 2.03333 11.5727 2 11.75 2C11.9273 2 12.0996 2.03333 12.2667 2.1C12.4338 2.16667 12.5782 2.26667 12.7 2.4L13.6167 3.33333C13.75 3.45556 13.8473 3.6 13.9087 3.76667C13.97 3.93333 14.0004 4.1 14 4.26667C14 4.44444 13.9696 4.614 13.9087 4.77533C13.8478 4.93667 13.7504 5.08378 13.6167 5.21667L4.83333 14H2ZM10.3167 5.68333L9.85 5.2L10.8 6.15L10.3167 5.68333Z"
+                  fill="#0CC0AA"
+                />
+              </svg>
+            </button>
+          )}
         </div>
       </section>
 
