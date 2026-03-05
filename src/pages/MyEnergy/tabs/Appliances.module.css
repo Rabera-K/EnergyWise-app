@@ -82,7 +82,7 @@
   padding: 32px;
   flex-direction: column;
   align-items: flex-start;
-  max-height: 416px;
+  /* height: 100%; */
   border-radius: 16px;
   background: #007365;
   box-shadow: 0 4px 4px 8px #137b6f;
@@ -504,6 +504,17 @@
   cursor: pointer;
 }
 /* RESPONSIVE */
+@media (max-width: 1024px) {
+  .topGrid {
+    grid-template-columns: 1fr;
+  }
+  .breakdown {
+    order: 2;
+  }
+  .balanceCard {
+    order: 1;
+  }
+}
 @media (max-width: 768px) {
   .searchBox input {
     display: none;
