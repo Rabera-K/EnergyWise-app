@@ -30,16 +30,19 @@ export default function ForecastTab() {
   const timeline = forecastData?.forecast_30_days ?? [];
   const depletionDay =
     forecastData?.depletionDay ?? dashData?.estimated_duration_days;
+
+  const today = Date.now();
   const depleteDate = depletionDay
-    ? new Date(Date.now() + Number(depletionDay) * 86400000).toLocaleDateString(
+    ? new Date(today + Number(depletionDay) * 86400000).toLocaleDateString(
         "en-US",
         { month: "short", day: "numeric" },
       )
     : "N/A";
-  const day7Date = new Date(Date.now() + 7 * 86400000).toLocaleDateString(
-    "en-US",
-    { month: "short", day: "numeric" },
-  );
+
+  const day7Date = new Date(today + 7 * 86400000).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
   const day7Units =
     timeline.find((d) => d.day === 7)?.projected_remaining_units?.toFixed(1) ??
     "—";
