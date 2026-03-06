@@ -148,7 +148,6 @@ const BusinessInfo = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Failed to save");
 
-      console.log("Business info submitted:", formData);
       navigate("/meter-setup");
     } catch (error) {
       console.error("Error:", error);
