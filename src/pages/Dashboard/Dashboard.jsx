@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import { useState, useEffect } from "react";
 import iconMap from "../../utils/iconMap";
+import { useData } from "../../context/DataContext";
 
 const APPLIANCE_TYPE_TO_KEY = {
   "Air Conditioner": "ac",
@@ -219,42 +220,32 @@ export default function Dashboard() {
   const [recommendation, setRec] = useState(null);
   const [appliances, setAppliances] = useState([]);
   const [trendData, setTrendData] = useState([]);
+  const { fetchWithCache } = useData();
 
   useEffect(() => {
-    const token = localStorage.getItem("ew_token");
-    const headers = { Authorization: `Bearer ${token}` };
+    const BASE = import.meta.env.VITE_API_URL;
 
-    //dashboard analytics
-    fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setDashData(d.data);
-        // Map monthly_trend to chart format
-        const trend = (d.data.monthly_trend || []).map((t) => ({
-          m: new Date(t.month + "-01").toLocaleString("en-US", {
-            month: "short",
-          }),
-          v: t.monthly_kwh_used,
-        }));
-        setTrendData(trend);
-      })
-      .catch(() => {});
+    fetchWithCache("dashboard", `${BASE}/dashboard`).then((data) => {
+      if (!data) return;
+      setDashData(data);
+      const trend = (data.monthly_trend || []).map((t) => ({
+        m: new Date(t.month + "-01").toLocaleString("en-US", {
+          month: "short",
+        }),
+        v: t.monthly_kwh_used,
+      }));
+      setTrendData(trend);
+    });
 
-    // Recommendations
-    fetch(`${import.meta.env.VITE_API_URL}/recommendations`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setRec(d.data);
-      })
-      .catch(() => {});
+    fetchWithCache("recommendations", `${BASE}/recommendations`).then(
+      (data) => {
+        if (data) setRec(data);
+      },
+    );
 
-    // Appliances for top consumers
-    fetch(`${import.meta.env.VITE_API_URL}/appliances`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setAppliances(d.data);
-      })
-      .catch(() => {});
+    fetchWithCache("appliances", `${BASE}/appliances`).then((data) => {
+      if (data) setAppliances(data);
+    });
   }, []);
   return (
     <div className={styles.page}>

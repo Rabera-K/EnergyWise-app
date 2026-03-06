@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../context/useAuth";
 import styles from "./Login.module.css";
+import { useData } from "../../../context/DataContext";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
+  const { fetchWithCache } = useData();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,6 +84,12 @@ const Login = () => {
       );
 
       login({ identifier: formData.emailOrPhone }, token);
+
+      const BASE = import.meta.env.VITE_API_URL;
+      fetchWithCache("dashboard", `${BASE}/dashboard`);
+      fetchWithCache("appliances", `${BASE}/appliances`);
+      fetchWithCache("recommendations", `${BASE}/recommendations`);
+      fetchWithCache("forecast", `${BASE}/forecast`);
 
       navigate("/user-type");
     } catch (error) {

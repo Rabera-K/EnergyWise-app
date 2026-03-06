@@ -1,26 +1,22 @@
 import styles from "./ForecastTab.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useData } from "../../../context/DataContext";
 
 export default function ForecastTab() {
   const [dashData, setDashData] = useState(null);
   const [forecastData, setForecastData] = useState(null);
+  const { fetchWithCache } = useData();
+
   useEffect(() => {
-    const token = localStorage.getItem("ew_token");
-    const headers = { Authorization: `Bearer ${token}` };
+    const BASE = import.meta.env.VITE_API_URL;
 
-    fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setDashData(d.data);
-      })
-      .catch(() => {});
+    fetchWithCache("dashboard", `${BASE}/dashboard`).then((data) => {
+      if (data) setDashData(data);
+    });
 
-    fetch(`${import.meta.env.VITE_API_URL}/forecast`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setForecastData(d.data);
-      })
-      .catch(() => {});
+    fetchWithCache("forecast", `${BASE}/forecast`).then((data) => {
+      if (data) setForecastData(data);
+    });
   }, []);
 
   const TARIFF = 110;
@@ -31,25 +27,30 @@ export default function ForecastTab() {
   const depletionDay =
     forecastData?.depletionDay ?? dashData?.estimated_duration_days;
 
-  const today = Date.now();
-  const depleteDate = depletionDay
-    ? new Date(today + Number(depletionDay) * 86400000).toLocaleDateString(
-        "en-US",
-        { month: "short", day: "numeric" },
-      )
-    : "N/A";
+  const { todayStr, day7Date, depleteDate } = useMemo(() => {
+    const now = Date.now();
+    return {
+      todayStr: new Date(now).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      day7Date: new Date(now + 7 * 86400000).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      }),
+      depleteDate: depletionDay
+        ? new Date(now + Number(depletionDay) * 86400000).toLocaleDateString(
+            "en-US",
+            { month: "short", day: "numeric" },
+          )
+        : "N/A",
+    };
+  }, [depletionDay]);
 
-  const day7Date = new Date(today + 7 * 86400000).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
   const day7Units =
     timeline.find((d) => d.day === 7)?.projected_remaining_units?.toFixed(1) ??
     "—";
-  const todayStr = new Date().toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
+
   return (
     <div className={styles.wrap}>
       <section className={styles.balanceCard}>

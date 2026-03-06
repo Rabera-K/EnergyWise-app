@@ -280,6 +280,15 @@
   align-items: center;
   gap: 28px;
 }
+@media (max-width: 768px) {
+  .modal {
+    width: 65%;
+    position: fixed;
+    margin: auto;
+    top: 50px;
+    left: 10px;
+  }
+}
 
 /* Title */
 .modalTitle {

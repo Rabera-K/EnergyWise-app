@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./RecommendationsTab.module.css";
+import { useData } from "../../../context/DataContext";
 
 /* ── Icons ───────────────────────────────────────── */
 function AcIcon() {
@@ -160,17 +161,15 @@ const doingWell = [
 /* ── Component ───────────────────────────────────── */
 export default function RecommendationsTab() {
   const [recData, setRecData] = useState(null);
+  const { fetchWithCache } = useData();
 
   useEffect(() => {
-    const token = localStorage.getItem("ew_token");
-    const headers = { Authorization: `Bearer ${token}` };
-
-    fetch(`${import.meta.env.VITE_API_URL}/recommendations`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setRecData(d.data);
-      })
-      .catch(() => {});
+    fetchWithCache(
+      "recommendations",
+      `${import.meta.env.VITE_API_URL}/recommendations`,
+    ).then((data) => {
+      if (data) setRecData(data);
+    });
   }, []);
   return (
     <div className={styles.wrap}>

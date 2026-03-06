@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Appliances.module.css";
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from "recharts";
 import iconMap from "../../../utils/iconMap";
+import { useData } from "../../../context/DataContext";
 
 // Appliance icon SVG
 function ApplianceIcon() {
@@ -123,6 +124,7 @@ function Appliances() {
   const [editingItem, setEditingItem] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [saving, setSaving] = useState(false);
+  const { fetchWithCache } = useData();
 
   const totalKwh = appliances.reduce(
     (sum, a) => sum + (a.wattage * a.hours_per_day * a.duty_cycle) / 1000,
@@ -142,22 +144,15 @@ function Appliances() {
         }));
 
   useEffect(() => {
-    const token = localStorage.getItem("ew_token");
-    const headers = { Authorization: `Bearer ${token}` };
+    const BASE = import.meta.env.VITE_API_URL;
 
-    fetch(`${import.meta.env.VITE_API_URL}/appliances`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setAppliances(d.data);
-      })
-      .catch(() => {});
+    fetchWithCache("appliances", `${BASE}/appliances`).then((data) => {
+      if (data) setAppliances(data);
+    });
 
-    fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setDashData(d.data);
-      })
-      .catch(() => {});
+    fetchWithCache("dashboard", `${BASE}/dashboard`).then((data) => {
+      if (data) setDashData(data);
+    });
   }, []);
 
   const handleEdit = (item) => {

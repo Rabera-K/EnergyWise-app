@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import styles from "./Account.module.css";
+import { useData } from "../../context/DataContext";
 
 const AFRICAN_COUNTRIES = {
   Nigeria: [
@@ -280,11 +281,12 @@ export default function Account() {
   const [meterInput, setMeterInput] = useState("");
   const [householdInput, setHouseholdInput] = useState("");
   const [savingMeter, setSavingMeter] = useState(false);
+  const { fetchWithCache } = useData();
 
   useEffect(() => {
-    const token = localStorage.getItem("ew_token");
     const ewUser = JSON.parse(localStorage.getItem("ew_user") || "{}");
     const ewName = JSON.parse(localStorage.getItem("ew_name") || "{}");
+
     setProfile({
       first_name: ewName.firstName || "",
       last_name: ewName.lastName || "",
@@ -295,21 +297,16 @@ export default function Account() {
       meter_number: sessionStorage.getItem("ew_meter") || "",
     });
 
-    fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) {
-          setProfile((prev) => ({
-            ...prev,
-            email: d.data.email,
-            phone: d.data.phone || prev.phone,
-            user_type: d.data.user_type || prev.user_type,
-          }));
-        }
+    fetchWithCache("auth_me", `${import.meta.env.VITE_API_URL}/auth/me`)
+      .then((data) => {
+        if (!data) return;
+        setProfile((prev) => ({
+          ...prev,
+          email: data.email,
+          phone: data.phone || prev.phone,
+          user_type: data.user_type || prev.user_type,
+        }));
       })
-      .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 

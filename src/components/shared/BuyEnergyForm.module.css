@@ -395,6 +395,15 @@
   color: #1a1f1e;
   text-align: center;
 }
+@media (max-width: 768px) {
+  .modal {
+    width: 65%;
+    position: fixed;
+    margin: auto;
+    top: 50px;
+    left: 10px;
+  }
+}
 
 /* -- Checkmark -- */
 .checkWrapper {

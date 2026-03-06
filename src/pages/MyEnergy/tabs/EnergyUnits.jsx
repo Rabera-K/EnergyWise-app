@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./EnergyUnits.module.css";
+import { useData } from "../../../context/DataContext";
 
 const QUICK_PURCHASE = [
   { kWh: 20, price: "₦2,200" },
@@ -12,15 +13,12 @@ function EnergyUnits() {
   const [selected, setSelected] = useState(null);
   const navigate = useNavigate();
   const [dashData, setDashData] = useState(null);
-  useEffect(() => {
-    const token = localStorage.getItem("ew_token");
-    const headers = { Authorization: `Bearer ${token}` };
+  const { fetchWithCache } = useData();
 
-    //dashboard analytics
-    fetch(`${import.meta.env.VITE_API_URL}/dashboard`, { headers })
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) setDashData(d.data);
+  useEffect(() => {
+    fetchWithCache("dashboard", `${import.meta.env.VITE_API_URL}/dashboard`)
+      .then((data) => {
+        if (data) setDashData(data);
       })
       .catch(() => {});
   }, []);
