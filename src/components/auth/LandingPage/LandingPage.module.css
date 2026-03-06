@@ -755,23 +755,6 @@
     rgb(245, 74, 0) 100%
   );
 }
-.technicians {
-  padding: 6rem 2rem;
-  /* background: white; */
-}
-
-.techContent {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.techImage {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .imagePlaceholder {
   width: 100%;
@@ -1141,8 +1124,16 @@
     grid-template-columns: 1fr;
     gap: 3rem;
   }
+  .heroCta {
+    justify-content: center;
+    flex-direction: column;
+  }
 
   .featureBlockReverse {
+    direction: rtl;
+  }
+
+  .featureBlockReverse > * {
     direction: ltr;
   }
 
@@ -1156,6 +1147,9 @@
 
   .footerGrid {
     grid-template-columns: 1fr 1fr;
+  }
+  .stepCard {
+    padding: 1rem;
   }
 }
 
@@ -1171,11 +1165,11 @@
   }
 
   .heroTitle {
-    font-size: 2.5rem;
+    font-size: 1.875rem;
   }
 
   .heroDescription {
-    font-size: 1rem;
+    font-size: 0.625rem;
   }
 
   .stats {
@@ -1205,5 +1199,8 @@
 
   .footerGrid {
     grid-template-columns: 1fr;
+  }
+  .mockupFloating {
+    display: none;
   }
 }
