@@ -321,6 +321,7 @@ export default function Account() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("ew_onboarded");
     localStorage.removeItem("ew_token");
     localStorage.removeItem("ew_user");
     localStorage.removeItem("ew_name");

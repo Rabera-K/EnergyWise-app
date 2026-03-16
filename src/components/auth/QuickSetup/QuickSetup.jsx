@@ -146,6 +146,7 @@ const QuickSetup = () => {
         }),
       );
 
+      localStorage.setItem("ew_onboarded", "true");
       navigate("/dashboard");
     } catch (error) {
       console.error("Error:", error);
