@@ -102,9 +102,6 @@ const Login = () => {
       fetchWithCache("recommendations", `${BASE}/recommendations`);
       fetchWithCache("forecast", `${BASE}/forecast`);
 
-      const existingUser = JSON.parse(localStorage.getItem("ew_user") || "{}");
-      const existingName = JSON.parse(localStorage.getItem("ew_name") || "{}");
-
       const hasOnboarded = localStorage.getItem("ew_onboarded") === "true";
 
       if (hasOnboarded) {
