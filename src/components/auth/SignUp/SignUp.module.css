@@ -188,7 +188,19 @@
   border-color: #ef4444;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
+.passwordWrapper {
+  position: relative;
+}
 
+.eyeIcon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 18px;
+  color: #777;
+}
 .errorText {
   margin: 0;
   font-size: 0.875rem;

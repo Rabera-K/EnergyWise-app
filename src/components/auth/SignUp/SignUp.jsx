@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "./SignUp.module.css";
 
 const SignUp = () => {
@@ -15,6 +16,8 @@ const SignUp = () => {
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,8 +56,13 @@ const SignUp = () => {
 
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
+    } else if (
+      !/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/.test(
+        formData.password,
+      )
+    ) {
+      newErrors.password =
+        "Password must be 8+ characters and include an uppercase letter, number, and special character";
     }
 
     if (!formData.confirmPassword) {
@@ -230,28 +238,52 @@ const SignUp = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder="Password"
-                className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
-              />
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Password"
+                  className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
+                />
+
+                <span
+                  className={styles.eyeIcon}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                </span>
+              </div>
+
               {errors.password && (
                 <p className={styles.errorText}>{errors.password}</p>
               )}
             </div>
 
             <div className={styles.formGroup}>
-              <input
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                placeholder="Confirm Password"
-                className={`${styles.input} ${errors.confirmPassword ? styles.inputError : ""}`}
-              />
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm Password"
+                  className={`${styles.input} ${errors.confirmPassword ? styles.inputError : ""}`}
+                />
+
+                <span
+                  className={styles.eyeIcon}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <AiOutlineEyeInvisible />
+                  ) : (
+                    <AiOutlineEye />
+                  )}
+                </span>
+              </div>
+
               {errors.confirmPassword && (
                 <p className={styles.errorText}>{errors.confirmPassword}</p>
               )}
