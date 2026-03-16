@@ -308,7 +308,7 @@ export default function Account() {
         }));
       })
       .finally(() => setLoading(false));
-  }, []);
+  }, [fetchWithCache]);
 
   const handleSave = (updated) => {
     setProfile((prev) => ({ ...prev, ...updated }));

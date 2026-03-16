@@ -105,11 +105,7 @@ const Login = () => {
       const existingUser = JSON.parse(localStorage.getItem("ew_user") || "{}");
       const existingName = JSON.parse(localStorage.getItem("ew_name") || "{}");
 
-      // User has onboarded if they have a user_type or meter_number saved
-      const hasOnboarded =
-        existingUser?.user_type ||
-        existingUser?.meter_number ||
-        existingName?.firstName;
+      const hasOnboarded = localStorage.getItem("ew_onboarded") === "true";
 
       if (hasOnboarded) {
         navigate("/dashboard");
