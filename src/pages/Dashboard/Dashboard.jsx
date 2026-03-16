@@ -246,7 +246,7 @@ export default function Dashboard() {
     fetchWithCache("appliances", `${BASE}/appliances`).then((data) => {
       if (data) setAppliances(data);
     });
-  }, []);
+  }, [fetchWithCache]);
   return (
     <div className={styles.page}>
       <PageHeader

@@ -3,19 +3,19 @@ import { UserContext } from "./UserContext";
 
 export function UserProvider({ children }) {
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("ew_user");
+    const storedUser = JSON.parse(localStorage.getItem("ew_user") || "{}");
+    const storedName = JSON.parse(localStorage.getItem("ew_name") || "{}");
 
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      const firstName = parsed.firstName || parsed.identifier || "User";
-      const lastName = parsed.lastName || "";
-      const initials =
-        `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    const firstName =
+      storedName.firstName ||
+      storedUser.firstName ||
+      storedUser.identifier ||
+      "User";
+    const lastName = storedName.lastName || storedUser.lastName || "";
+    const initials =
+      `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 
-      return { name: firstName, initials };
-    }
-
-    return { name: "User", initials: "U" };
+    return { name: firstName, lastName, initials };
   });
 
   return (

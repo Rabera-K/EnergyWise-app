@@ -153,7 +153,7 @@ function Appliances() {
     fetchWithCache("dashboard", `${BASE}/dashboard`).then((data) => {
       if (data) setDashData(data);
     });
-  }, []);
+  }, [fetchWithCache]);
 
   const handleEdit = (item) => {
     setEditingItem(item.id);

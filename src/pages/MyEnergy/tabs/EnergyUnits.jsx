@@ -21,7 +21,7 @@ function EnergyUnits() {
         if (data) setDashData(data);
       })
       .catch(() => {});
-  }, []);
+  }, [fetchWithCache]);
   return (
     <div className={styles.container}>
       <div className={styles.balanceCard}>

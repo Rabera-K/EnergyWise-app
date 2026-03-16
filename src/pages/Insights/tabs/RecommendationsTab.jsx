@@ -170,7 +170,7 @@ export default function RecommendationsTab() {
     ).then((data) => {
       if (data) setRecData(data);
     });
-  }, []);
+  }, [fetchWithCache]);
   return (
     <div className={styles.wrap}>
       {/* Mini stats */}
