@@ -7,8 +7,9 @@ import {
   Cell,
 } from "recharts";
 import styles from "./TrendsTab.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useData } from "../../../context/DataContext";
+import iconMap from "../../../utils/iconMap";
 
 /* ── Icons ───────────────────────────────────────── */
 function AcIcon() {
@@ -238,14 +239,19 @@ function CalendarIcon() {
 }
 
 /* ── Data ────────────────────────────────────────── */
-
-const breakdown = [
-  { name: "Air Conditioner", pct: "60%", Icon: AcIcon },
-  { name: "Refrigerator", pct: "12%", Icon: FridgeIcon },
-  { name: "Television", pct: "8%", Icon: TvIcon },
-  { name: "Lighting", pct: "5%", Icon: LightIcon },
-  { name: "Other devices", pct: "3%", Icon: PlugIcon },
-];
+const APPLIANCE_TYPE_TO_KEY = {
+  "Air Conditioner": "ac",
+  Fridge: "fridge",
+  Bulb: "bulb",
+  Laptop: "laptop",
+  Fan: "fan",
+  Kettle: "kettle",
+  Modem: "modem",
+  "Hand Dryer": "dryer",
+  TV: "tv",
+  Microwave: "microwave",
+  "Other Appliances": "socket",
+};
 
 /* ── Custom tooltip ──────────────────────────────── */
 function CustomTooltip({ active, payload, label }) {
@@ -271,6 +277,29 @@ export default function TrendsTab() {
   const [dashData, setDashData] = useState(null);
   const [trendData, setTrendData] = useState([]);
   const { fetchWithCache } = useData();
+  const [appliances, setAppliances] = useState([]);
+  const totalKwh = useMemo(
+    () =>
+      appliances.reduce(
+        (sum, a) =>
+          sum + (a.wattage * a.hours_per_day * (a.duty_cycle || 0.8)) / 1000,
+        0,
+      ),
+    [appliances],
+  );
+
+  const breakdownData = useMemo(
+    () =>
+      appliances.slice(0, 5).map((x) => {
+        const iconKey = APPLIANCE_TYPE_TO_KEY[x.appliance_type];
+        const pct =
+          totalKwh > 0
+            ? `${Math.round(((x.wattage * x.hours_per_day * (x.duty_cycle || 0.8)) / 1000 / totalKwh) * 100)}%`
+            : "0%";
+        return { ...x, iconKey, pct };
+      }),
+    [appliances, totalKwh],
+  );
 
   useEffect(() => {
     fetchWithCache(
@@ -286,6 +315,12 @@ export default function TrendsTab() {
         v: t.monthly_kwh_used,
       }));
       setTrendData(trend);
+    });
+    fetchWithCache(
+      "appliances",
+      `${import.meta.env.VITE_API_URL}/appliances`,
+    ).then((data) => {
+      if (data) setAppliances(data);
     });
   }, [fetchWithCache]);
 
@@ -376,17 +411,18 @@ export default function TrendsTab() {
           <div className={styles.thisMonth}>This month</div>
         </div>
         <div className={styles.breakdown}>
-          {breakdown.map((b) => (
-            <div className={styles.row} key={b.name}>
-              <div className={styles.left}>
-                <div className={styles.iconBox}>
-                  <b.Icon />
+          {breakdownData.map((x, i) => {
+            const Icon = iconMap[x.iconKey];
+            return (
+              <div className={styles.row} key={i}>
+                <div className={styles.left}>
+                  <div className={styles.iconBox}>{Icon ? <Icon /> : null}</div>
+                  <div className={styles.name}>{x.appliance_type}</div>
                 </div>
-                <div className={styles.name}>{b.name}</div>
+                <div className={styles.pct}>{x.pct}</div>
               </div>
-              <div className={styles.pct}>{b.pct}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
