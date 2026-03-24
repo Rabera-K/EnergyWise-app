@@ -297,7 +297,11 @@ export default function Dashboard() {
             >
               <BuyIcon /> Buy Energy
             </button>
-            <button className={styles.btnPrimary}>
+            <button
+              className={styles.btnPrimary}
+              disabled
+              style={{ opacity: 0.5 }}
+            >
               <SendIcon /> Send Energy
             </button>
             <button
