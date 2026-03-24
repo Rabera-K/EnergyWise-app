@@ -221,6 +221,7 @@ export default function Dashboard() {
   const [appliances, setAppliances] = useState([]);
   const [trendData, setTrendData] = useState([]);
   const { fetchWithCache } = useData();
+  const [trendFilter, setTrendFilter] = useState("Month");
 
   useEffect(() => {
     const BASE = import.meta.env.VITE_API_URL;
@@ -328,9 +329,15 @@ export default function Dashboard() {
           <div className={styles.panelHeader}>
             <h3>Consumption Trends</h3>
             <div className={styles.segment}>
-              <button>Week</button>
-              <button className={styles.segmentActive}>Month</button>
-              <button>Year</button>
+              {["Week", "Month", "Year"].map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setTrendFilter(f)}
+                  className={trendFilter === f ? styles.segmentActive : ""}
+                >
+                  {f}
+                </button>
+              ))}
             </div>
           </div>
 
