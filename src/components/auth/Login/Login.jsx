@@ -102,9 +102,14 @@ const Login = () => {
       fetchWithCache("recommendations", `${BASE}/recommendations`);
       fetchWithCache("forecast", `${BASE}/forecast`);
 
-      const hasOnboarded = localStorage.getItem("ew_onboarded") === "true";
+      const meRes = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const meData = await meRes.json();
+      const isOnboarded = meData.data?.onboarding?.is_onboarded === true;
 
-      if (hasOnboarded) {
+      if (isOnboarded) {
+        localStorage.setItem("ew_onboarded", "true");
         navigate("/dashboard");
       } else {
         navigate("/user-type");
