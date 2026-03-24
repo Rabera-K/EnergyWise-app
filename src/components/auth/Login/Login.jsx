@@ -86,16 +86,7 @@ const Login = () => {
       );
 
       login({ identifier: formData.emailOrPhone }, token);
-      const ewName = JSON.parse(localStorage.getItem("ew_name") || "{}");
-      const firstName = ewName.firstName || formData.emailOrPhone;
-      const lastName = ewName.lastName || "";
-
-      setUser({
-        name: firstName,
-        lastName,
-        initials: `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase(),
-      });
-
+    
       const BASE = import.meta.env.VITE_API_URL;
       fetchWithCache("dashboard", `${BASE}/dashboard`);
       fetchWithCache("appliances", `${BASE}/appliances`);
@@ -106,6 +97,17 @@ const Login = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const meData = await meRes.json();
+      const u = meData.data;
+      const firstName = u?.first_name || formData.emailOrPhone.split("@")[0];
+      const lastName = u?.last_name || "";
+      setUser({
+        name: firstName,
+        lastName,
+        initials: lastName
+          ? `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase()
+          : firstName.slice(0, 2).toUpperCase(),
+      });
+
       const isOnboarded = meData.data?.onboarding?.is_onboarded === true;
 
       if (isOnboarded) {
