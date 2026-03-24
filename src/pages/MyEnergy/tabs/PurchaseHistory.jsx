@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useData } from "../../../context/DataContext";
 import {
   LineChart,
   Line,
@@ -55,6 +56,18 @@ const CHART_DATA = {
 function PurchaseHistory() {
   const [activeFilter, setActiveFilter] = useState("Last 30 days");
   const [activeChartFilter, setActiveChartFilter] = useState("Week");
+  const [purchases, setPurchases] = useState([]);
+  const { fetchWithCache } = useData();
+
+  useEffect(() => {
+    fetchWithCache(
+      "purchases",
+      `${import.meta.env.VITE_API_URL}/energy-purchases`,
+    ).then((data) => {
+      if (data) setPurchases(data);
+    });
+  }, [fetchWithCache]);
+
   return (
     <div className={styles.container}>
       <div className={styles.topBar}>
@@ -90,29 +103,47 @@ function PurchaseHistory() {
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Purchase History</h3>
 
-        {PURCHASE.map(({ id, date, amount, units }) => (
-          <div key={id} className={styles.purchaseItem}>
-            <span className={styles.cardIcon}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="40"
-                fill="none"
-              >
-                <rect width="40" height="40" fill="#F0FDFA" rx="8" />
-                <path
-                  fill="#F59E0B"
-                  d="M23.75 23a.75.75 0 1 0 0 1.5h3a.75.75 0 1 0 0-1.5h-3ZM9.5 16.25a3.75 3.75 0 0 1 3.75-3.75h13.5a3.75 3.75 0 0 1 3.75 3.75v7.5a3.75 3.75 0 0 1-3.75 3.75h-13.5a3.75 3.75 0 0 1-3.75-3.75v-7.5ZM29 17v-.75A2.25 2.25 0 0 0 26.75 14h-13.5A2.25 2.25 0 0 0 11 16.25V17h18Zm-18 1.5v5.25A2.25 2.25 0 0 0 13.25 26h13.5A2.25 2.25 0 0 0 29 23.75V18.5H11Z"
-                />
-              </svg>
-            </span>
-            <div className={styles.purchaseInfo}>
-              <p className={styles.purchaseDate}>{date}</p>
-              <p className={styles.purchaseAmount}>{amount}</p>
+        {purchases.length === 0 ? (
+          <p style={{ color: "#9ca3af", fontSize: "14px" }}>
+            No purchases yet.
+          </p>
+        ) : (
+          purchases.map((p) => (
+            <div key={p.id} className={styles.purchaseItem}>
+              <span className={styles.cardIcon}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="40"
+                  height="40"
+                  fill="none"
+                >
+                  <rect width="40" height="40" fill="#F0FDFA" rx="8" />
+                  <path
+                    fill="#F59E0B"
+                    d="M23.75 23a.75.75 0 1 0 0 1.5h3a.75.75 0 1 0 0-1.5h-3ZM9.5 16.25a3.75 3.75 0 0 1 3.75-3.75h13.5a3.75 3.75 0 0 1 3.75 3.75v7.5a3.75 3.75 0 0 1-3.75 3.75h-13.5a3.75 3.75 0 0 1-3.75-3.75v-7.5ZM29 17v-.75A2.25 2.25 0 0 0 26.75 14h-13.5A2.25 2.25 0 0 0 11 16.25V17h18Zm-18 1.5v5.25A2.25 2.25 0 0 0 13.25 26h13.5A2.25 2.25 0 0 0 29 23.75V18.5H11Z"
+                  />
+                </svg>
+              </span>
+              <div className={styles.purchaseInfo}>
+                <p className={styles.purchaseDate}>
+                  {new Date(p.date).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                </p>
+                <p className={styles.purchaseAmount}>
+                  {p.amount_paid
+                    ? `₦${Number(p.amount_paid).toLocaleString()}`
+                    : "N/A"}
+                </p>
+              </div>
+              <span className={styles.purchaseUnits}>
+                +{p.units_purchased} kWh
+              </span>
             </div>
-            <span className={styles.purchaseUnits}>{units}</span>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       {/* -----Chart----- */}
       <div className={styles.chartSection}>

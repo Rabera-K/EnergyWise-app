@@ -52,7 +52,7 @@ function EnergyUnits() {
 
             <span>Buy Energy</span>
           </button>
-          <button className={styles.btnAmber}>
+          <button className={styles.btnAmber} disabled style={{ opacity: 0.5 }}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
