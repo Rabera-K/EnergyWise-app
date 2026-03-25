@@ -207,7 +207,7 @@ function BuyEnergyForm({ variant }) {
             </p>
           )}
         </div>
-        <span className={styles.customUnit}>kWh</span>
+        {/* <span className={styles.customUnit}>kWh</span> */}
       </div>
       {/* Payment method */}
       <div>

@@ -320,7 +320,7 @@ export default function Dashboard() {
           <div className={styles.todayRight}>
             <div className={styles.todayDelta}>-12%</div>
             <div className={styles.todayValue}>
-              {dashData?.today_consumption ?? 3.8} kWh
+              {dashData?.todays_consumption_units ?? 3.8} kWh
             </div>
             <div className={styles.todayLabel}>Today's Consumption</div>
           </div>
