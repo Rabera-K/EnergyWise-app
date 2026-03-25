@@ -86,7 +86,7 @@ const Login = () => {
       );
 
       login({ identifier: formData.emailOrPhone }, token);
-    
+
       const BASE = import.meta.env.VITE_API_URL;
       fetchWithCache("dashboard", `${BASE}/dashboard`);
       fetchWithCache("appliances", `${BASE}/appliances`);
